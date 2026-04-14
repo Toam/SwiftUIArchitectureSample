@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E24AD39D2F8E4F2500FF8CF2 /* agents.md in Resources */ = {isa = PBXBuildFile; fileRef = E24AD39C2F8E4F2500FF8CF2 /* agents.md */; };
 		E24AD3A02F8E4F2E00FF8CF2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E24AD39F2F8E4F2E00FF8CF2 /* README.md */; };
 		E24AD3A12F8E4F2E00FF8CF2 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = E24AD39E2F8E4F2E00FF8CF2 /* LICENSE */; };
+		E24AD3A32F8E4F8900FF8CF2 /* Agents.md in Resources */ = {isa = PBXBuildFile; fileRef = E24AD3A22F8E4F8900FF8CF2 /* Agents.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,9 +30,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E24AD39C2F8E4F2500FF8CF2 /* agents.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = agents.md; sourceTree = "<group>"; };
 		E24AD39E2F8E4F2E00FF8CF2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E24AD39F2F8E4F2E00FF8CF2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E24AD3A22F8E4F8900FF8CF2 /* Agents.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Agents.md; sourceTree = "<group>"; };
 		E28A5A042F8E4A19000A9F62 /* SwiftUIArchitectureSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIArchitectureSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28A5A112F8E4A1A000A9F62 /* SwiftUIArchitectureSampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftUIArchitectureSampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28A5A1B2F8E4A1A000A9F62 /* SwiftUIArchitectureSampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftUIArchitectureSampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,9 +88,9 @@
 				E28A5A142F8E4A1A000A9F62 /* SwiftUIArchitectureSampleTests */,
 				E28A5A1E2F8E4A1A000A9F62 /* SwiftUIArchitectureSampleUITests */,
 				E28A5A052F8E4A19000A9F62 /* Products */,
-				E24AD39C2F8E4F2500FF8CF2 /* agents.md */,
-				E24AD39E2F8E4F2E00FF8CF2 /* LICENSE */,
+				E24AD3A22F8E4F8900FF8CF2 /* Agents.md */,
 				E24AD39F2F8E4F2E00FF8CF2 /* README.md */,
+				E24AD39E2F8E4F2E00FF8CF2 /* LICENSE */,
 			);
 			sourceTree = "<group>";
 		};
@@ -224,8 +224,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E24AD39D2F8E4F2500FF8CF2 /* agents.md in Resources */,
 				E24AD3A02F8E4F2E00FF8CF2 /* README.md in Resources */,
+				E24AD3A32F8E4F8900FF8CF2 /* Agents.md in Resources */,
 				E24AD3A12F8E4F2E00FF8CF2 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
