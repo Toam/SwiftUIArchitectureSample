@@ -10,7 +10,19 @@ import SwiftData
 
 struct ContentView: View {
     var body: some View {
-        TodoListView()
+        TabView {
+            Tab("Today", systemImage: "sun.max") {
+                TodoListView()
+            }
+
+            Tab("Later", systemImage: "calendar") {
+                LaterTasksView()
+            }
+
+            Tab("Settings", systemImage: "gearshape") {
+                SettingsView()
+            }
+        }
     }
 }
 

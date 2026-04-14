@@ -13,9 +13,19 @@ struct AddTaskSheet: View {
     @Environment(\.modelContext) private var modelContext
 
     @FocusState private var isTitleFocused: Bool
-    @State private var title = ""
-    @State private var details = ""
-    @State private var dueDate = Date()
+    @State private var title: String
+    @State private var details: String
+    @State private var hasDueDate: Bool
+    @State private var dueDate: Date
+    @State private var isPriority: Bool
+
+    init(hasDueDate: Bool = true, dueDate: Date = .now, isPriority: Bool = false) {
+        _title = State(initialValue: "")
+        _details = State(initialValue: "")
+        _hasDueDate = State(initialValue: hasDueDate)
+        _dueDate = State(initialValue: dueDate)
+        _isPriority = State(initialValue: isPriority)
+    }
 
     private var trimmedTitle: String {
         title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -35,8 +45,16 @@ struct AddTaskSheet: View {
                         .lineLimit(3...6)
                         .accessibilityIdentifier("task-description-field")
 
-                    DatePicker("Date", selection: $dueDate, displayedComponents: .date)
-                        .accessibilityIdentifier("task-date-picker")
+                    Toggle("Priority", isOn: $isPriority)
+                        .accessibilityIdentifier("task-priority-toggle")
+
+                    Toggle("Set Date", isOn: $hasDueDate)
+                        .accessibilityIdentifier("task-has-date-toggle")
+
+                    if hasDueDate {
+                        DatePicker("Date", selection: $dueDate, displayedComponents: .date)
+                            .accessibilityIdentifier("task-date-picker")
+                    }
                 }
             }
             .navigationTitle("New Task")
@@ -67,7 +85,8 @@ struct AddTaskSheet: View {
         if TodoItemActions.createTask(
             title: trimmedTitle,
             details: details,
-            dueDate: dueDate,
+            dueDate: hasDueDate ? dueDate : nil,
+            isPriority: isPriority,
             in: modelContext
         ) != nil {
             dismiss()

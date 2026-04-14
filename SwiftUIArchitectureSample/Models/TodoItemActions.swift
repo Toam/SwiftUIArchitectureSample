@@ -18,7 +18,8 @@ enum TodoItemActions {
     static func createTask(
         title: String,
         details: String = "",
-        dueDate: Date = .now,
+        dueDate: Date? = .now,
+        isPriority: Bool = false,
         in context: ModelContext
     ) -> TodoItem? {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -31,9 +32,18 @@ enum TodoItemActions {
         let item = TodoItem(
             title: trimmedTitle,
             details: trimmedDetails,
-            dueDate: dueDate
+            dueDate: dueDate,
+            isPriority: isPriority
         )
         context.insert(item)
+
+        do {
+            try context.save()
+        } catch {
+            context.delete(item)
+            return nil
+        }
+
         return item
     }
 
@@ -45,7 +55,8 @@ enum TodoItemActions {
         _ item: TodoItem,
         title: String,
         details: String,
-        dueDate: Date
+        dueDate: Date?,
+        isPriority: Bool
     ) {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedDetails = details.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -57,6 +68,7 @@ enum TodoItemActions {
         item.title = trimmedTitle
         item.details = trimmedDetails
         item.dueDate = dueDate
+        item.isPriority = isPriority
     }
 
     static func delete(_ item: TodoItem, from context: ModelContext) {
@@ -70,8 +82,11 @@ enum TodoItemActions {
             return
         }
 
-        defaultTaskTitles.forEach { title in
-            createTask(title: title, in: context)
-        }
+        createTask(title: defaultTaskTitles[0], isPriority: true, in: context)
+        createTask(
+            title: defaultTaskTitles[1],
+            dueDate: Calendar.current.date(byAdding: .day, value: 1, to: .now),
+            in: context
+        )
     }
 }

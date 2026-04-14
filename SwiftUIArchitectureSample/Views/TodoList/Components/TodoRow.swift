@@ -20,6 +20,7 @@ struct TodoRow: View {
             TodoRowDetailsButton(item: item, action: showDetails)
         }
         .padding(.vertical, 8)
+        .listRowBackground(item.isPriority ? Color.yellow.opacity(0.12) : nil)
         .swipeActions(edge: .trailing) {
             Button("Delete", role: .destructive, action: delete)
                 .accessibilityIdentifier("delete-\(item.title)")

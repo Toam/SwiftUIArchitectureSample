@@ -15,13 +15,17 @@ struct TodoDetailSheet: View {
     @FocusState private var isTitleFocused: Bool
     @State private var title: String
     @State private var details: String
+    @State private var hasDueDate: Bool
     @State private var dueDate: Date
+    @State private var isPriority: Bool
 
     init(item: TodoItem) {
         self.item = item
         _title = State(initialValue: item.title)
         _details = State(initialValue: item.details)
-        _dueDate = State(initialValue: item.dueDate)
+        _hasDueDate = State(initialValue: item.dueDate != nil)
+        _dueDate = State(initialValue: item.dueDate ?? .now)
+        _isPriority = State(initialValue: item.isPriority)
     }
 
     private var trimmedTitle: String {
@@ -42,6 +46,9 @@ struct TodoDetailSheet: View {
                         item.isCompleted ? "Completed" : "Not completed",
                         systemImage: item.isCompleted ? "checkmark.circle.fill" : "circle"
                     )
+
+                    Toggle("Priority", isOn: $isPriority)
+                        .accessibilityIdentifier("task-detail-priority-toggle")
                 }
 
                 Section("Description") {
@@ -51,8 +58,13 @@ struct TodoDetailSheet: View {
                 }
 
                 Section("Date") {
-                    DatePicker("Date", selection: $dueDate, displayedComponents: .date)
-                        .accessibilityIdentifier("task-detail-date-picker")
+                    Toggle("Set Date", isOn: $hasDueDate)
+                        .accessibilityIdentifier("task-detail-has-date-toggle")
+
+                    if hasDueDate {
+                        DatePicker("Date", selection: $dueDate, displayedComponents: .date)
+                            .accessibilityIdentifier("task-detail-date-picker")
+                    }
                 }
             }
             .navigationTitle("Edit Task")
@@ -81,7 +93,8 @@ struct TodoDetailSheet: View {
             item,
             title: title,
             details: details,
-            dueDate: dueDate
+            dueDate: hasDueDate ? dueDate : nil,
+            isPriority: isPriority
         )
         dismiss()
     }
@@ -93,7 +106,8 @@ struct TodoDetailSheet: View {
             title: "Review SwiftUI architecture",
             details: "Keep the view structure simple and native.",
             dueDate: .now,
-            isCompleted: true
+            isCompleted: true,
+            isPriority: true
         )
     )
 }

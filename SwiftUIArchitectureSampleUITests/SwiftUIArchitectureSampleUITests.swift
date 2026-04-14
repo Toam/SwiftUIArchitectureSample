@@ -20,8 +20,11 @@ final class SwiftUIArchitectureSampleUITests: XCTestCase {
         app.launch()
 
         XCTAssertTrue(app.staticTexts["My first task"].waitForExistence(timeout: 5))
+
+        app.tabBars.buttons["Later"].tap()
         XCTAssertTrue(app.staticTexts["My second task"].exists)
 
+        app.tabBars.buttons["Today"].tap()
         app.buttons["add-task-button"].tap()
 
         let taskNameField = app.textFields["task-name-field"]

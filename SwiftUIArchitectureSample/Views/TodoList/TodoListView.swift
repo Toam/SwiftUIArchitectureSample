@@ -17,23 +17,17 @@ struct TodoListView: View {
     @State private var selectedItem: TodoItem?
     @State private var selectionFeedbackTrigger = 0
 
-    private var filteredTodoItems: [TodoItem] {
-        let trimmedSearchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        guard !trimmedSearchText.isEmpty else {
-            return todoItems
-        }
-
-        return todoItems.filter { item in
-            item.title.localizedStandardContains(trimmedSearchText)
-        }
+    private var todayItems: [TodoItem] {
+        TodoItemFilters.todayItems(
+            from: TodoItemFilters.search(todoItems, text: searchText)
+        )
     }
 
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
                 TodoListContent(
-                    todoItems: filteredTodoItems,
+                    todoItems: todayItems,
                     searchText: searchText,
                     toggleCompletion: toggleCompletion,
                     delete: delete,
@@ -44,14 +38,14 @@ struct TodoListView: View {
                     isAddTaskPresented = true
                 }
             }
-            .navigationTitle("Tasks")
+            .navigationTitle("Today")
             .searchable(
                 text: $searchText,
-                placement: .navigationBarDrawer(displayMode: .always),
+                placement: .navigationBarDrawer(displayMode: .automatic),
                 prompt: "Search tasks"
             )
             .sheet(isPresented: $isAddTaskPresented) {
-                AddTaskSheet()
+                AddTaskSheet(hasDueDate: true, dueDate: .now)
             }
             .sheet(item: $selectedItem) { item in
                 TodoDetailSheet(item: item)
@@ -87,7 +81,7 @@ struct TodoListView: View {
         .modelContainer(TodoListPreviewData.modelContainer)
 }
 
-private enum TodoListPreviewData {
+enum TodoListPreviewData {
     @MainActor
     static let modelContainer: ModelContainer = {
         let schema = Schema([TodoItem.self])
@@ -96,16 +90,19 @@ private enum TodoListPreviewData {
 
         container.mainContext.insert(TodoItem(
             title: "Review SwiftUI architecture",
-            details: "Keep the view structure simple and native."
+            details: "Keep the view structure simple and native.",
+            isPriority: true
         ))
         container.mainContext.insert(TodoItem(
             title: "Add SwiftData persistence",
             details: "Use SwiftData directly from SwiftUI views.",
+            dueDate: Calendar.current.date(byAdding: .day, value: 1, to: .now),
             isCompleted: true
         ))
         container.mainContext.insert(TodoItem(
             title: "Write Swift Testing coverage",
-            details: "Cover task creation, completion, and deletion."
+            details: "Cover task creation, completion, and deletion.",
+            dueDate: nil
         ))
 
         return container
