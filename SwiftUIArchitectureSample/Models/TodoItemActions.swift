@@ -41,6 +41,24 @@ enum TodoItemActions {
         item.isCompleted.toggle()
     }
 
+    static func updateTask(
+        _ item: TodoItem,
+        title: String,
+        details: String,
+        dueDate: Date
+    ) {
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedDetails = details.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmedTitle.isEmpty else {
+            return
+        }
+
+        item.title = trimmedTitle
+        item.details = trimmedDetails
+        item.dueDate = dueDate
+    }
+
     static func delete(_ item: TodoItem, from context: ModelContext) {
         context.delete(item)
     }

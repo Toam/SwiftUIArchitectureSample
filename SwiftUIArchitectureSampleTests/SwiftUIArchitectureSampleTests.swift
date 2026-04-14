@@ -61,6 +61,42 @@ struct SwiftUIArchitectureSampleTests {
         #expect(item.isCompleted)
     }
 
+    @Test func updateTaskTrimsAndUpdatesEditableFields() {
+        let item = TodoItem(title: "Old title")
+        let dueDate = Date(timeIntervalSince1970: 1_900_000_000)
+
+        TodoItemActions.updateTask(
+            item,
+            title: "  New title  ",
+            details: "  New description  ",
+            dueDate: dueDate
+        )
+
+        #expect(item.title == "New title")
+        #expect(item.details == "New description")
+        #expect(item.dueDate == dueDate)
+    }
+
+    @Test func updateTaskIgnoresEmptyTitles() {
+        let item = TodoItem(
+            title: "Keep title",
+            details: "Keep description",
+            dueDate: Date(timeIntervalSince1970: 1_700_000_000)
+        )
+        let originalDueDate = item.dueDate
+
+        TodoItemActions.updateTask(
+            item,
+            title: "   ",
+            details: "New description",
+            dueDate: Date(timeIntervalSince1970: 1_900_000_000)
+        )
+
+        #expect(item.title == "Keep title")
+        #expect(item.details == "Keep description")
+        #expect(item.dueDate == originalDueDate)
+    }
+
     @MainActor
     @Test func deleteTaskRemovesItFromPersistence() throws {
         let container = try makeModelContainer()

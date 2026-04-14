@@ -12,15 +12,31 @@ struct TodoDetailSheet: View {
 
     let item: TodoItem
 
-    private var formattedDueDate: String {
-        item.dueDate.formatted(date: .abbreviated, time: .omitted)
+    @FocusState private var isTitleFocused: Bool
+    @State private var title: String
+    @State private var details: String
+    @State private var dueDate: Date
+
+    init(item: TodoItem) {
+        self.item = item
+        _title = State(initialValue: item.title)
+        _details = State(initialValue: item.details)
+        _dueDate = State(initialValue: item.dueDate)
+    }
+
+    private var trimmedTitle: String {
+        title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section("Task") {
-                    Text(item.title)
+                    TextField("Task name", text: $title)
+                        .focused($isTitleFocused)
+                        .submitLabel(.done)
+                        .onSubmit(saveTask)
+                        .accessibilityIdentifier("task-detail-title-field")
 
                     Label(
                         item.isCompleted ? "Completed" : "Not completed",
@@ -29,28 +45,45 @@ struct TodoDetailSheet: View {
                 }
 
                 Section("Description") {
-                    if item.details.isEmpty {
-                        Text("No description")
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Text(item.details)
-                    }
+                    TextField("Description", text: $details, axis: .vertical)
+                        .lineLimit(3...6)
+                        .accessibilityIdentifier("task-detail-description-field")
                 }
 
                 Section("Date") {
-                    Text(formattedDueDate)
+                    DatePicker("Date", selection: $dueDate, displayedComponents: .date)
+                        .accessibilityIdentifier("task-detail-date-picker")
                 }
             }
-            .navigationTitle("Task Details")
+            .navigationTitle("Edit Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
                         dismiss()
                     }
                 }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done", action: saveTask)
+                        .disabled(trimmedTitle.isEmpty)
+                }
             }
         }
+    }
+
+    private func saveTask() {
+        guard !trimmedTitle.isEmpty else {
+            return
+        }
+
+        TodoItemActions.updateTask(
+            item,
+            title: title,
+            details: details,
+            dueDate: dueDate
+        )
+        dismiss()
     }
 }
 

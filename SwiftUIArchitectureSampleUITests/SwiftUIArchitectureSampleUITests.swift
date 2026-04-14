@@ -40,7 +40,9 @@ final class SwiftUIArchitectureSampleUITests: XCTestCase {
         XCTAssertTrue(createdTask.waitForExistence(timeout: 2))
 
         app.buttons["todo-row-Read SwiftData docs"].tap()
-        XCTAssertTrue(app.staticTexts["Cover creation, completion, search, and deletion."].waitForExistence(timeout: 2))
+        let detailDescriptionField = app.textFields["task-detail-description-field"]
+        XCTAssertTrue(detailDescriptionField.waitForExistence(timeout: 2))
+        XCTAssertEqual(detailDescriptionField.value as? String, "Cover creation, completion, search, and deletion.")
         app.buttons["Done"].tap()
 
         app.buttons["todo-toggle-Read SwiftData docs"].tap()
